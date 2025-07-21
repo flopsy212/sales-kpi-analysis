@@ -33,6 +33,17 @@
 （notebooks/01_analysis.ipynb に記載）
 
 ## 🗂 ディレクトリ構成
-（上記と同じ構造）
+sales-kpi-analysis/
+├── data/
+│   ├── raw/              ← 擬似元データ（CSVなど）
+│   └── processed/        ← 加工済データ
+├── notebooks/
+│   └── 01_analysis.ipynb ← 仮説検証・可視化ノート
+├── streamlit_app/
+│   ├── app.py            ← ダッシュボード本体
+│   └── components.py     ← グラフや関数（分離も可）
+├── er_diagram.png        ← ER図（構想段階でも可）
+├── README.md             ← 背景・仮説・構成・結果まとめ
+└── requirements.txt      ← pandas, streamlitなど依存関係
 
 [GitHub](https://github.com/flopsy212) / [Qiita](https://qiita.com/flopsy_tech)
