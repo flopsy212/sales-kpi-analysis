@@ -1,67 +1,113 @@
 # 営業KPI分析プロジェクト - Sales KPI Insight
 
 ## 🎯 目的
-営業メンバーごとの成約率や活動傾向をKPIから分析し、
-改善点や営業手法の最適化に向けた示唆を導く。
+営業現場でよくある「数字を追っているのに結果が出ない」という課題に対し、  
+営業メンバーごとのKPIデータ（アポ数・商談数・成約率）と顧客属性（業種・企業規模・地域）を分析し、  
+成約率を左右する要因を特定することで、営業戦略や配属方針の改善に貢献することを目的としたプロジェクトです。
 
-## 🧩 分析仮説
-- アポ数が多くても成約率が低い営業がいる？
-- 業界や企業規模によって、営業ごとの相性がある？
-- 活動のタイミング（曜日・時間帯）がCV率に影響？
+本プロジェクトでは、**仮説設計 → データ整形 → 分析 → 可視化 → 示唆の抽出** までを一貫して実施。  
+Streamlitを用いた簡易ダッシュボードにより、非エンジニアでもKPIを俯瞰できる仕組みを構築しました。
+このダッシュボードは営業マネージャーが現場のKPIを俯瞰・比較し、戦略判断に活用できるよう設計しました。
+分析結果を非エンジニアでも扱いやすくするため、ダッシュボードには軽量かつ即公開可能なStreamlitを採用。
 
-## 🔧 使用技術
-- Python（pandas, matplotlib, seaborn）
-- SQL（BigQuery構文想定）
-- Streamlit（ダッシュボード構築）
+## 🧑‍💻 使用技術・構成
 
-## 📁 データ構成（すべて擬似データ）
-- sales.csv
-- clients.csv
-- activities.csv
+| 分類 | 使用技術 | 理由・特徴 |
+|------|-----------|-------------|
+| 言語 | Python / SQL | 分析・集計・ETL処理の基本として |
+| 可視化 | matplotlib / seaborn / Streamlit | 分析・ダッシュボードに活用 |
+| バージョン管理 | GitHub | プロジェクト管理・アウトプット |
+| ドキュメント | Qiita | 分析ストーリーと示唆の記録 |
+| インフラ | ローカル + Streamlit Cloud | シンプルに公開できる構成 |
+
+## 🧩 ER図
+
+sales (営業)
+├─ sales_id (PK)
+├─ name
+├─ age
+├─ years_of_exp
+├─ num_appointments
+├─ num_negotiations
+└─ num_successes
+
+clients (顧客)
+├─ client_id (PK)
+├─ industry
+├─ company_size
+├─ region
+└─ result (1: 成約 / 0: 失注)
+
+activities (営業活動ログ)
+├─ activity_id (PK)
+├─ date
+├─ sales_id (FK)
+├─ client_id (FK)
+└─ status
+
+## インフラ構成図
+[CSV] → [Python / pandas] → [Streamlit] → [公開 or ローカル表示]
+
+## 📊 分析対象データ（すべて擬似データ / 自作CSV）
+
+- `sales.csv`：営業ごとのKPI（アポ・商談・成約数＋属性）
+- `clients.csv`：顧客の業界、規模、地域、成否
+- `activities.csv`：日付別の活動履歴
+
+## 🔍 仮説リスト
+
+- 営業個人の「数」ではなく「相性」が成否を分けているのでは？
+- 営業経験が短い人ほど業界ごとの向き不向きがあるのでは？
+- 午前中より午後の方がCV率が高いのでは？
+
+## 💡 得られた示唆（例）
+
+- 商談数が多い＝成約率が高い、とは限らない（むしろ逆転する場合あり）
+- 小規模企業・IT業界に対して強い営業担当が存在
+- 問い合わせ実施時間帯がCV率に影響（午後の方が高い傾向）
 - 
-## 🔍 プロジェクト概要
-成約率に差がある営業メンバーのKPIデータをもとに、
-行動傾向や顧客属性との関係を分析し、改善の示唆を行う。
+## 🖥 Streamlitダッシュボード
 
-## 🎯 課題と仮説
-- 成約率が高い人は「特定業界」に強いのでは？
-- 商談数が少ない人の成約率はどうか？
-- 担当顧客の規模・エリアが影響している可能性？
+- 営業別KPIサマリー（棒グラフ・CV率ソート）
+- 業界別成約率ヒートマップ
+- 顧客属性（業界×規模×地域）別の傾向分析
+- 時間帯別の問い合わせ成果分析
 
-## 📊 分析対象データ
-- `sales.csv`：営業ごとのアポ数、商談数、成約数
-- `clients.csv`：顧客の業種、規模、地域
-- `activities.csv`：各営業の活動ログ（日時、顧客、商談内容など）
+👉 **[デモはこちら（Streamlit Cloud）](https://your-app-link)**  
+👉 ![dashboard gif](demo.gif)
 
-## 🛠 使用技術
-- Python（pandas, matplotlib, seaborn）
-- SQL（BigQuery風のJOIN集計も一部想定）
-- Streamlit（簡易BIダッシュボード風に）
+## 🧠 工夫した点・チャレンジ技術
 
-## 🧠 得られたインサイト（抜粋）
-- 【仮説①】が〇〇で裏付けられた
-- 商談数が少なくても特定業種には強い営業がいる
-- エリア別の成約率に偏りがあった → テリトリー配分の見直し提案
+- データスキーマ設計からKPI定義・加工までを自分で設計
+- SQL（JOIN・GROUP BY）とpandas処理を併用し、複雑な集計にも対応
+- Streamlitでインタラクティブなフィルタを導入（営業別・業界別切り替え）
+- ER図・ディレクトリ構成・デモGIFをREADMEで丁寧に記載し、レビューされる前提でのドキュメント設計を意識
 
-## 🖥 ダッシュボードイメージ
-（Streamlitの画面キャプチャ or 動画リンク）
+## 📂 ディレクトリ構成
 
-## 📚 分析ストーリー詳細
-（notebooks/01_analysis.ipynb に記載）
-
-## 🗂 ディレクトリ構成
 sales-kpi-analysis/
 ├── data/
-│   ├── raw/              ← 擬似元データ（CSVなど）
-│   └── processed/        ← 加工済データ
+│ ├── raw/ # 擬似元データ（CSV）
+│ └── processed/ # 加工後データ
 ├── notebooks/
-│   └── 01_analysis.ipynb ← 仮説検証・可視化ノート
+│ └── 01_analysis.ipynb # 仮説検証・可視化
 ├── streamlit_app/
-│   ├── app.py            ← ダッシュボード本体
-│   └── components.py     ← グラフや関数（分離も可）
-├── er_diagram.png        ← ER図（構想段階でも可）
-├── README.md             ← 背景・仮説・構成・結果まとめ
-└── requirements.txt      ← pandas, streamlitなど依存関係
+│ ├── app.py # ダッシュボード本体
+│ └── components.py # 各種グラフ関数
+├── er_diagram.png # ER図（画像）
+├── demo.gif # ダッシュボード操作GIF
+├── README.md
+└── requirements.txt # pandas, streamlit など
+
+
+## 📝 今後の展望
+
+- 顧客との商談内容（テキストログ）を使った自然言語解析の導入
+- 成約予測モデルの構築（回帰/分類）
+- Looker StudioやTableauを使ったBI連携の模擬開発
 
 
 [GitHub](https://github.com/flopsy212) / [Qiita](https://qiita.com/flopsy_tech)
+
+
+
