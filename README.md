@@ -1,7 +1,24 @@
-# sales-kpi-analysis
-
 # 営業KPI分析プロジェクト - Sales KPI Insight
 
+## 🎯 目的
+営業メンバーごとの成約率や活動傾向をKPIから分析し、
+改善点や営業手法の最適化に向けた示唆を導く。
+
+## 🧩 分析仮説
+- アポ数が多くても成約率が低い営業がいる？
+- 業界や企業規模によって、営業ごとの相性がある？
+- 活動のタイミング（曜日・時間帯）がCV率に影響？
+
+## 🔧 使用技術
+- Python（pandas, matplotlib, seaborn）
+- SQL（BigQuery構文想定）
+- Streamlit（ダッシュボード構築）
+
+## 📁 データ構成（すべて擬似データ）
+- sales.csv
+- clients.csv
+- activities.csv
+- 
 ## 🔍 プロジェクト概要
 成約率に差がある営業メンバーのKPIデータをもとに、
 行動傾向や顧客属性との関係を分析し、改善の示唆を行う。
@@ -45,5 +62,6 @@ sales-kpi-analysis/
 ├── er_diagram.png        ← ER図（構想段階でも可）
 ├── README.md             ← 背景・仮説・構成・結果まとめ
 └── requirements.txt      ← pandas, streamlitなど依存関係
+
 
 [GitHub](https://github.com/flopsy212) / [Qiita](https://qiita.com/flopsy_tech)
