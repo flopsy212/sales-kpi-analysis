@@ -5,10 +5,8 @@
 営業メンバーごとのKPIデータ（アポ数・商談数・成約率）と顧客属性（業種・企業規模・地域）を分析し、  
 成約率を左右する要因を特定することで、営業戦略や配属方針の改善に貢献することを目的としたプロジェクトです。
 
-本プロジェクトでは、**仮説設計 → データ整形 → 分析 → 可視化 → 示唆の抽出** までを一貫して実施。  
-Streamlitを用いた簡易ダッシュボードにより、非エンジニアでもKPIを俯瞰できる仕組みを構築しました。
-このダッシュボードは営業マネージャーが現場のKPIを俯瞰・比較し、戦略判断に活用できるよう設計しました。
-分析結果を非エンジニアでも扱いやすくするため、ダッシュボードには軽量かつ即公開可能なStreamlitを採用。
+Streamlitを用いたダッシュボードにより、営業マネージャーがKPIを俯瞰・比較し、戦略判断に活用できる仕組みを構築しました。  
+非エンジニアでも使いやすいことを重視し、軽量で即公開可能な **Streamlit** を採用しています。
 
 ## 🧑‍💻 使用技術・構成
 
@@ -46,7 +44,7 @@ activities (営業活動ログ)
 └─ status
 
 ## インフラ構成図
-[CSV] → [Python / pandas] → [Streamlit] → [公開 or ローカル表示]
+[CSVデータ] → [Python / pandas処理] → [Streamlitダッシュボード] → [ローカル or Cloudで公開]
 
 ## 📊 分析対象データ（すべて擬似データ / 自作CSV）
 
@@ -73,7 +71,7 @@ activities (営業活動ログ)
 - 顧客属性（業界×規模×地域）別の傾向分析
 - 時間帯別の問い合わせ成果分析
 
-👉 **[デモはこちら（Streamlit Cloud）](https://your-app-link)**  
+👉 **[デモはこちら](https://your-app-link)**  
 👉 ![dashboard gif](demo.gif)
 
 ## 🧠 工夫した点・チャレンジ技術
@@ -81,23 +79,23 @@ activities (営業活動ログ)
 - データスキーマ設計からKPI定義・加工までを自分で設計
 - SQL（JOIN・GROUP BY）とpandas処理を併用し、複雑な集計にも対応
 - Streamlitでインタラクティブなフィルタを導入（営業別・業界別切り替え）
-- ER図・ディレクトリ構成・デモGIFをREADMEで丁寧に記載し、レビューされる前提でのドキュメント設計を意識
+- READMEにER図・構成図・デモGIFを掲載し、ドキュメント力を強く意識
 
 ## 📂 ディレクトリ構成
 
 sales-kpi-analysis/
 ├── data/
-│ ├── raw/ # 擬似元データ（CSV）
-│ └── processed/ # 加工後データ
+│   ├── raw/              # 擬似元データ（CSV）
+│   └── processed/        # 加工後データ
 ├── notebooks/
-│ └── 01_analysis.ipynb # 仮説検証・可視化
+│   └── 01_analysis.ipynb # 仮説検証・可視化用ノートブック
 ├── streamlit_app/
-│ ├── app.py # ダッシュボード本体
-│ └── components.py # 各種グラフ関数
-├── er_diagram.png # ER図（画像）
-├── demo.gif # ダッシュボード操作GIF
+│   ├── app.py            # ダッシュボード本体
+│   └── components.py     # グラフ描画関数など
+├── er_diagram.png        # ER図
+├── demo.gif              # ダッシュボード操作GIF
 ├── README.md
-└── requirements.txt # pandas, streamlit など
+└── requirements.txt      # pandas, streamlit など
 
 
 ## 📝 今後の展望
