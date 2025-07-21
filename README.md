@@ -107,5 +107,3 @@ sales-kpi-analysis/
 
 [GitHub](https://github.com/flopsy212) / [Qiita](https://qiita.com/flopsy_tech)
 
-
-
