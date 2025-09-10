@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # データ読み込み
+
 sales_df = pd.read_csv("data/processed/sales.csv")
 
 # 成約率計算
