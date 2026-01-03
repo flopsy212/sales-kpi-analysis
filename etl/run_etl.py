@@ -1,23 +1,20 @@
-from __future__ import annotations
-
 import argparse
 import logging
 from pathlib import Path
 
-from etl.extract import extract_csv
-from etl.transform import transform
-from etl.load import load_to_sqlite
-
+from etl.extract import extract_all_csv  # ←あなたの実装に合わせて変更
+from etl.transform import transform_all  # ←あなたの実装に合わせて変更
+from etl.load import load_to_sqlite      # ←あなたの実装に合わせて変更
 
 logger = logging.getLogger(__name__)
 
 
-def parse_args() -> argparse.Namespace:
-    p = argparse.ArgumentParser(description="Run ETL batch (CSV -> pandas -> SQLite)")
-    p.add_argument("--csv", required=True, help="Input CSV path")
-    p.add_argument("--db", required=True, help="Output SQLite db path")
-    p.add_argument("--table", default="normalized_sales", help="Destination table name")
-    p.add_argument("--encoding", default="utf-8", help="CSV encoding")
+def parse_args():
+    p = argparse.ArgumentParser(description="Sales KPI ETL batch")
+    p.add_argument("--input", default="data/raw", help="raw csv directory")
+    p.add_argument("--output", default="data/processed", help="processed output directory")
+    p.add_argument("--db", default="db/app.sqlite", help="sqlite db path")
+    p.add_argument("--table", default="kpi_mart", help="destination table name")
     return p.parse_args()
 
 
@@ -25,19 +22,23 @@ def main() -> int:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     args = parse_args()
 
-    csv_path = Path(args.csv)
+    input_dir = Path(args.input)
+    output_dir = Path(args.output)
     db_path = Path(args.db)
 
-    logger.info("ETL start: csv=%s db=%s table=%s", csv_path, db_path, args.table)
+    logger.info("ETL start input=%s output=%s db=%s table=%s", input_dir, output_dir, db_path, args.table)
 
-    df_raw = extract_csv(csv_path, encoding=args.encoding)
-    logger.info("Extract done: rows=%d cols=%d", len(df_raw), len(df_raw.columns))
+    # extract
+    df_raw = extract_all_csv(input_dir)   # ここだけあなたの実装に合わせる
+    logger.info("extract done: rows=%d cols=%d", len(df_raw), len(df_raw.columns))
 
-    df_norm = transform(df_raw)
-    logger.info("Transform done: rows=%d cols=%d", len(df_norm), len(df_norm.columns))
+    # transform
+    df = transform_all(df_raw)            # ここだけあなたの実装に合わせる
+    logger.info("transform done: rows=%d cols=%d", len(df), len(df.columns))
 
-    load_to_sqlite(df_norm, db_path=db_path, table_name=args.table, if_exists="replace")
-    logger.info("Load done")
+    # load
+    load_to_sqlite(df, db_path=db_path, table_name=args.table)  # ここだけあなたの実装に合わせる
+    logger.info("load done")
 
     logger.info("ETL success")
     return 0
