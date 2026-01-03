@@ -2,9 +2,9 @@ import argparse
 import logging
 from pathlib import Path
 
-from etl.extract import extract_all_csv  # ←あなたの実装に合わせて変更
-from etl.transform import transform_all  # ←あなたの実装に合わせて変更
-from etl.load import load_to_sqlite      # ←あなたの実装に合わせて変更
+from etl.extract import extract_all_csv  
+from etl.transform import transform_all  
+from etl.load import load_to_sqlite      
 
 logger = logging.getLogger(__name__)
 
@@ -29,15 +29,20 @@ def main() -> int:
     logger.info("ETL start input=%s output=%s db=%s table=%s", input_dir, output_dir, db_path, args.table)
 
     # extract
-    df_raw = extract_all_csv(input_dir)   # ここだけあなたの実装に合わせる
+    df_raw = extract_all_csv(input_dir)   
     logger.info("extract done: rows=%d cols=%d", len(df_raw), len(df_raw.columns))
 
     # transform
-    df = transform_all(df_raw)            # ここだけあなたの実装に合わせる
+    df = transform_all(df_raw)            
     logger.info("transform done: rows=%d cols=%d", len(df), len(df.columns))
+    output_dir.mkdir(parents=True, exist_ok=True)
+    (df
+     .to_csv(output_dir / "kpi_mart.csv", index=False)
+    )
+    logger.info("write processed: %s", output_dir / "kpi_mart.csv")
 
     # load
-    load_to_sqlite(df, db_path=db_path, table_name=args.table)  # ここだけあなたの実装に合わせる
+    load_to_sqlite(df, db_path=db_path, table_name=args.table)  
     logger.info("load done")
 
     logger.info("ETL success")
