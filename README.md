@@ -103,6 +103,7 @@ sales-kpi-analysis/
 - 顧客との商談内容（テキストログ）を使った自然言語解析の導入
 - 成約予測モデルの構築（回帰/分類）
 - Looker StudioやTableauを使ったBI連携の模擬開発
+python -m etl.run_etl --input data/raw --output data/processed --db db/app.sqlite --table kpi_mart
 
 
 [GitHub](https://github.com/flopsy212) / [Qiita](https://qiita.com/flopsy_tech)
